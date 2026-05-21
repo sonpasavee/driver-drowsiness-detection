@@ -1,0 +1,13 @@
+2026-05-21 17:15:34 | INFO     | __main__ | กำลังเปิดกล้อง index=0
+2026-05-21 17:15:34 | INFO     | __main__ | กล้องพร้อม — resolution=640x480 fps=30.0
+2026-05-21 17:15:34 | INFO     | camera_test | กด Q เพื่อออก
+2026-05-21 17:16:35 | INFO     | __main__ | กำลังเปิดกล้อง index=0
+2026-05-21 17:16:35 | INFO     | __main__ | กล้องพร้อม — resolution=640x480 fps=30.0
+2026-05-21 17:16:35 | INFO     | camera_test | กด Q เพื่อออก
+2026-05-21 17:17:19 | INFO     | __main__ | ปิดกล้องแล้ว (อ่านไปทั้งหมด 1293 frames)
+2026-05-21 17:21:32 | INFO     | __main__ | Opening camera index=0
+2026-05-21 17:21:33 | INFO     | __main__ | Camera ready - resolution=640x480 fps=30.0
+2026-05-21 17:21:33 | INFO     | camera_test | Press Q to exit
+2026-05-21 17:21:40 | INFO     | __main__ | Camera released after 199 frames
+2026-05-21 17:21:40 | INFO     | camera_test | stop
+2026-05-21 17:21:40 | INFO     | camera_test | Camera closed

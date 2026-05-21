@@ -1,0 +1,38 @@
+camera:
+  index: 0
+  width: 640
+  height: 480
+  fps: 30
+  reconnect_attempts: 5
+  reconnect_delay: 2.0
+
+detector:
+  detection_confidence: 0.5
+  tracking_confidence: 0.5
+  max_num_faces: 1
+
+analyzer:
+  ear_threshold: 0.25
+  mar_threshold: 0.6
+  head_pitch_threshold: 20.0
+  head_yaw_threshold: 35.0
+  perclos_window_sec: 60
+  consec_drowsy_frames: 20
+
+scoring:
+  weight_perclos: 0.40
+  weight_ear: 0.25
+  weight_mar: 0.20
+  weight_head: 0.15
+
+state_machine:
+  warn_threshold: 60
+  alert_threshold: 80
+  critical_threshold: 90
+  cooldown_sec: 5.0
+
+logging:
+  level: DEBUG
+  file: logs/driver_monitor.log
+  max_bytes: 5242880
+  backup_count: 3
