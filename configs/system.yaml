@@ -17,23 +17,68 @@ analyzer:
   mar_threshold: 0.6
   head_pitch_threshold: 20.0
   head_yaw_threshold: 35.0
+  head_roll_threshold: 20.0
   perclos_window_sec: 60
   consec_drowsy_frames: 20
+  eye_calibration_duration_sec: 5.0
+  eye_calibration_min_samples: 30
+  eye_calibration_ratio: 0.75
+  mar_calibration_duration_sec: 5.0
+  mar_calibration_min_samples: 30
+  mar_calibration_ratio: 1.8
+  yawn_window_sec: 30.0
+  head_calibration_duration_sec: 5.0
+  head_calibration_min_samples: 30
+  head_smoothing_window: 5
 
 scoring:
   weight_perclos: 0.40
   weight_ear: 0.25
   weight_mar: 0.20
   weight_head: 0.15
+  smooth_window: 10
+  history_window_frames: 300
+  eye_consec_score_frames: 20
+  head_consec_score_frames: 20
+  perclos_max_percent: 80.0
+  yawn_rate_max_per_min: 6.0
+  eye_drowsy_min_score: 80.0
+  yawning_min_score: 60.0
+  distracted_min_score: 70.0
 
 state_machine:
+  mild_threshold: 40
   warn_threshold: 60
   alert_threshold: 80
   critical_threshold: 90
   cooldown_sec: 5.0
+  no_face_timeout_sec: 3.0
+  hysteresis_mild_sec: 3.0
+  hysteresis_warning_sec: 2.0
+  hysteresis_alert_sec: 1.0
+  hysteresis_critical_sec: 0.5
+  mild_cooldown_sec: 30.0
+  warning_cooldown_sec: 10.0
+  alert_cooldown_sec: 5.0
+  critical_cooldown_sec: 2.0
 
 logging:
-  level: DEBUG
+  level: INFO
   file: logs/driver_monitor.log
   max_bytes: 5242880
   backup_count: 3
+
+alerting:
+  enabled: true
+  sound_enabled: true
+  sound_frequency_hz: 1200
+  sound_duration_ms: 350
+  speech_enabled: false
+  overlay_enabled: true
+
+app:
+  window_name: Driver Drowsiness Detection
+  show_landmarks: true
+  show_fps: true
+  save_session_metrics: true
+  session_dir: logs/sessions

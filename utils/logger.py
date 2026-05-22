@@ -5,43 +5,64 @@ import sys
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
+from utils.config import Config
 
-def get_logger(name: str) -> logging.Logger:
-    """
-    คืน logger ที่ตั้งค่าแล้ว ทุกไฟล์ในโปรเจคเรียกฟังก์ชันนี้
-    - แสดงผลใน console และบันทึกลงไฟล์พร้อมกัน
-    - ใช้ RotatingFileHandler ไม่ให้ log file ใหญ่เกินไป
-    """
-    logger = logging.getLogger(name)
+_LOGGING_CONFIGURED = False
 
-    if logger.handlers:
-        return logger
 
-    logger.setLevel(logging.DEBUG)
+def _resolve_level(level_name: str) -> int:
+    return getattr(logging, level_name.upper(), logging.INFO)
+
+
+def _configure_root_logger() -> None:
+    global _LOGGING_CONFIGURED
+    if _LOGGING_CONFIGURED:
+        return
+
+    cfg = Config()
+    level_name = cfg.get("logging.level", "INFO")
+    log_file = Path(cfg.get("logging.file", "logs/driver_monitor.log"))
+    max_bytes = int(cfg.get("logging.max_bytes", 5 * 1024 * 1024))
+    backup_count = int(cfg.get("logging.backup_count", 3))
+    log_level = _resolve_level(level_name)
+
+    log_file.parent.mkdir(parents=True, exist_ok=True)
 
     formatter = logging.Formatter(
         fmt="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
-    # Console handler
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setLevel(logging.DEBUG)
+    root_logger = logging.getLogger()
+    root_logger.setLevel(log_level)
+    root_logger.handlers.clear()
+
+    stdout_stream = sys.stdout
+    if hasattr(stdout_stream, "reconfigure"):
+        try:
+            stdout_stream.reconfigure(errors="replace")
+        except OSError:
+            pass
+
+    console_handler = logging.StreamHandler(stdout_stream)
+    console_handler.setLevel(log_level)
     console_handler.setFormatter(formatter)
 
-    # File handler
-    log_dir = Path("logs")
-    log_dir.mkdir(exist_ok=True)
     file_handler = RotatingFileHandler(
-        filename=log_dir / "driver_monitor.log",
-        maxBytes=5 * 1024 * 1024,  # 5 MB
-        backupCount=3,
+        filename=log_file,
+        maxBytes=max_bytes,
+        backupCount=backup_count,
         encoding="utf-8",
     )
-    file_handler.setLevel(logging.DEBUG)
+    file_handler.setLevel(log_level)
     file_handler.setFormatter(formatter)
 
-    logger.addHandler(console_handler)
-    logger.addHandler(file_handler)
+    root_logger.addHandler(console_handler)
+    root_logger.addHandler(file_handler)
+    _LOGGING_CONFIGURED = True
 
-    return logger
+
+def get_logger(name: str) -> logging.Logger:
+    """Return a project logger configured from `configs/system.yaml`."""
+    _configure_root_logger()
+    return logging.getLogger(name)

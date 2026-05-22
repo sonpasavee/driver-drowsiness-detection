@@ -49,11 +49,9 @@ class EyeAnalyzer:
     """
 
     # จำนวนวินาทีที่ calibrate
-    _CALIB_DURATION: float = 5.0
-    # ต้องได้ sample อย่างน้อยกี่ตัวถึงจะ calibrate สำเร็จ
-    _CALIB_MIN_SAMPLES: int = 30
-    # threshold = baseline × ratio นี้
-    _CALIB_RATIO: float = 0.75
+    _DEFAULT_CALIB_DURATION: float = 5.0
+    _DEFAULT_CALIB_MIN_SAMPLES: int = 30
+    _DEFAULT_CALIB_RATIO: float = 0.75
 
     def __init__(self, config: Optional[Config] = None) -> None:
         cfg = config or Config()
@@ -62,12 +60,26 @@ class EyeAnalyzer:
         self._fallback_threshold: float = cfg.analyzer.ear_threshold
         self._perclos_window: float     = cfg.analyzer.perclos_window_sec
         self._consec_frames: int        = cfg.analyzer.consec_drowsy_frames
+        self._calib_duration: float = cfg.get(
+            "analyzer.eye_calibration_duration_sec",
+            self._DEFAULT_CALIB_DURATION,
+        )
+        self._calib_min_samples: int = int(
+            cfg.get(
+                "analyzer.eye_calibration_min_samples",
+                self._DEFAULT_CALIB_MIN_SAMPLES,
+            )
+        )
+        self._calib_ratio: float = cfg.get(
+            "analyzer.eye_calibration_ratio",
+            self._DEFAULT_CALIB_RATIO,
+        )
 
         # --- Calibration state ---
         self._calibrating: bool           = True
         self._calib_samples: list[float]  = []
         self._calib_start: float          = time.monotonic()
-        self._calib_remaining: float      = self._CALIB_DURATION
+        self._calib_remaining: float      = self._calib_duration
         self._adaptive_threshold: Optional[float] = None
 
         # --- Runtime state ---
@@ -77,7 +89,7 @@ class EyeAnalyzer:
         self._closed_frames: int = 0
 
         logger.info(
-            f"EyeAnalyzer ready — calibrating {self._CALIB_DURATION}s | "
+            f"EyeAnalyzer ready — calibrating {self._calib_duration}s | "
             f"fallback_threshold={self._fallback_threshold} | "
             f"perclos_window={self._perclos_window}s | "
             f"consec_frames={self._consec_frames}"
@@ -143,6 +155,7 @@ class EyeAnalyzer:
             "drowsy":           drowsy,
             "calibrating":      self._calibrating,
             "calib_remaining":  round(self._calib_remaining, 1),
+            "calib_duration":   round(self._calib_duration, 1),
             "threshold":        round(self.threshold, 3),
         }
 
@@ -154,7 +167,7 @@ class EyeAnalyzer:
         self._calibrating        = True
         self._calib_samples      = []
         self._calib_start        = time.monotonic()
-        self._calib_remaining    = self._CALIB_DURATION
+        self._calib_remaining    = self._calib_duration
         self._adaptive_threshold = None
         self._perclos_buffer.clear()
         self._consec_count  = 0
@@ -199,18 +212,18 @@ class EyeAnalyzer:
             return
 
         elapsed = now - self._calib_start
-        self._calib_remaining = max(0.0, self._CALIB_DURATION - elapsed)
+        self._calib_remaining = max(0.0, self._calib_duration - elapsed)
 
-        if elapsed < self._CALIB_DURATION:
+        if elapsed < self._calib_duration:
             self._calib_samples.append(ear)
             return
 
         # ครบเวลาแล้ว — คำนวณ threshold
-        if len(self._calib_samples) >= self._CALIB_MIN_SAMPLES:
+        if len(self._calib_samples) >= self._calib_min_samples:
             # percentile 80 = ค่าที่ EAR ส่วนใหญ่ตอนตาเปิดอยู่ใต้นี้
             # ทำให้ outlier จากตากระพริบหรือหันหน้าไม่กระทบ
             baseline = float(np.percentile(self._calib_samples, 80))
-            self._adaptive_threshold = baseline * self._CALIB_RATIO
+            self._adaptive_threshold = baseline * self._calib_ratio
             logger.info(
                 f"Calibration complete — "
                 f"samples={len(self._calib_samples)} "
@@ -220,7 +233,7 @@ class EyeAnalyzer:
         else:
             logger.warning(
                 f"Calibration ได้ sample แค่ {len(self._calib_samples)} "
-                f"(ต้องการ {self._CALIB_MIN_SAMPLES}+) — ใช้ fallback={self._fallback_threshold}"
+                f"(ต้องการ {self._calib_min_samples}+) — ใช้ fallback={self._fallback_threshold}"
             )
 
         self._calibrating = False
@@ -265,7 +278,8 @@ def draw_eye_status(
         )
 
         # countdown bar
-        bar_w = int(w * (1.0 - remaining / EyeAnalyzer._CALIB_DURATION))
+        duration = max(float(result.get("calib_duration", EyeAnalyzer._DEFAULT_CALIB_DURATION)), 0.1)
+        bar_w = int(w * (1.0 - remaining / duration))
         cv2.rectangle(frame, (0, 55), (bar_w, 60), (0, 200, 200), -1)
         return frame
 
