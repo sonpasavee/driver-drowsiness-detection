@@ -10,6 +10,7 @@ detector:
   detection_confidence: 0.5
   tracking_confidence: 0.5
   max_num_faces: 1
+  model_asset_path: assets/face_landmarker_v2.task
 
 analyzer:
   ear_threshold: 0.25
