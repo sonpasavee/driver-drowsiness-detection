@@ -9,6 +9,32 @@ from utils.config import Config
 
 _LOGGING_CONFIGURED = False
 
+_SUPPRESSED_INFO_PATTERNS = (
+    "ready",
+    "calibration complete",
+    "sessionwriter disabled",
+    "session saved",
+    "summary saved",
+    "camera released after",
+    "opening camera",
+    "manual recalibrate triggered",
+    "interrupted by keyboard",
+    "quit requested by user",
+    "reset - recalibrating",
+    "reset — recalibrating",
+)
+
+
+class ProductionLogFilter(logging.Filter):
+    """Hide low-signal runtime chatter while keeping important production events."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        if record.levelno >= logging.WARNING:
+            return True
+
+        message = record.getMessage().lower()
+        return not any(pattern in message for pattern in _SUPPRESSED_INFO_PATTERNS)
+
 
 def _resolve_level(level_name: str) -> int:
     return getattr(logging, level_name.upper(), logging.INFO)
@@ -47,6 +73,7 @@ def _configure_root_logger() -> None:
     console_handler = logging.StreamHandler(stdout_stream)
     console_handler.setLevel(log_level)
     console_handler.setFormatter(formatter)
+    console_handler.addFilter(ProductionLogFilter())
 
     file_handler = RotatingFileHandler(
         filename=log_file,
@@ -56,6 +83,7 @@ def _configure_root_logger() -> None:
     )
     file_handler.setLevel(log_level)
     file_handler.setFormatter(formatter)
+    file_handler.addFilter(ProductionLogFilter())
 
     root_logger.addHandler(console_handler)
     root_logger.addHandler(file_handler)

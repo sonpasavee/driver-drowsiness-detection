@@ -111,14 +111,14 @@ class DriverMonitoringApp:
 
                 key = cv2.waitKey(1) & 0xFF
                 if key == ord("q"):
-                    self.logger.info("Quit requested by user")
+                    self.logger.debug("Quit requested by user")
                     break
                 if key == ord("r"):
                     self.logger.info("Manual reset requested")
                     self._reset_runtime()
 
         except KeyboardInterrupt:
-            self.logger.info("Interrupted by keyboard")
+            self.logger.debug("Interrupted by keyboard")
         finally:
             self.close()
 
@@ -202,13 +202,6 @@ class DriverMonitoringApp:
                     "score": state_result["score"],
                 },
             )
-            self.logger.info(
-                "State changed %s -> %s | score=%.1f",
-                state_result["prev_state"],
-                state_result["state"],
-                state_result["score"],
-            )
-
         output = frame.copy()
         if self.show_landmarks and face_detected:
             self._draw_minimal_landmarks(output, landmarks, eye_result, mar_result)

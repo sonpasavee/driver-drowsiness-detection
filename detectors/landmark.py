@@ -56,7 +56,7 @@ class LandmarkDetector:
         self._no_face_count: int = 0
 
         self._warmup()
-        logger.info(
+        logger.debug(
             "LandmarkDetector ready - "
             f"backend={self._backend_name} "
             f"confidence={self._detection_confidence} "

@@ -160,7 +160,7 @@ class StateMachine:
         self._session_start: float    = time.monotonic()
         self._total_frames: int       = 0
 
-        logger.info(
+        logger.debug(
             f"StateMachine ready — "
             f"warn={self._warn_thr} "
             f"alert={self._alert_thr} "
@@ -272,7 +272,7 @@ class StateMachine:
         self._last_state_start   = now
         self._session_start      = now
         self._total_frames       = 0
-        logger.info("StateMachine reset")
+        logger.info("State machine reset")
 
     @property
     def current_state(self) -> DriverState:

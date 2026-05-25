@@ -72,7 +72,7 @@ class Camera:
         if self._cap is not None:
             self._cap.release()
             self._cap = None
-            logger.info(f"Camera released after {self._frame_count} frames")
+            logger.debug(f"Camera released after {self._frame_count} frames")
 
     @property
     def is_opened(self) -> bool:
@@ -90,7 +90,7 @@ class Camera:
 
     def _open(self) -> bool:
         """Open camera and configure resolution / fps."""
-        logger.info(f"Opening camera index={self._index}")
+        logger.debug(f"Opening camera index={self._index}")
         cap = cv2.VideoCapture(self._index)
 
         if not cap.isOpened():
@@ -105,7 +105,7 @@ class Camera:
         actual_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         actual_fps = cap.get(cv2.CAP_PROP_FPS)
 
-        logger.info(
+        logger.debug(
             f"Camera ready - resolution={actual_w}x{actual_h} fps={actual_fps:.1f}"
         )
 
@@ -116,12 +116,12 @@ class Camera:
         """Reconnect camera based on configured retry settings."""
         self.release()
         for attempt in range(1, self._reconnect_attempts + 1):
-            logger.info(
+            logger.warning(
                 f"Reconnect attempt {attempt}/{self._reconnect_attempts}..."
             )
             time.sleep(self._reconnect_delay)
             if self._open():
-                logger.info("Reconnect successful")
+                logger.warning("Reconnect successful")
                 return True
         logger.error("Reconnect failed")
         return False

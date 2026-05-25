@@ -84,13 +84,13 @@ class SessionWriter:
         if self._enabled:
             # เขียนไฟล์เปล่าก่อน ป้องกันข้อมูลหายถ้าโปรแกรม crash
             self._flush()
-            logger.info(
+            logger.debug(
                 f"SessionWriter ready — "
                 f"session_id={self._session_id} "
                 f"path={self._session_dir}"
             )
         else:
-            logger.info("SessionWriter disabled (app.save_session_metrics=false)")
+            logger.debug("SessionWriter disabled (app.save_session_metrics=false)")
 
     # ------------------------------------------------------------------
     # Public API
