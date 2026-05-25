@@ -82,3 +82,6 @@ app:
   show_fps: true
   save_session_metrics: true
   session_dir: logs/sessions
+  summary_json_enabled: true
+  frame_log_enabled: false
+  frame_log_interval_frames: 30

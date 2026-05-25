@@ -1,0 +1,56 @@
+{
+  "session_id": "20260525_141813",
+  "driver_id": "unknown",
+  "started_at": "2026-05-25T14:18:13",
+  "ended_at": "2026-05-25T14:19:06",
+  "duration_minutes": 0.87,
+  "timeseries": [],
+  "events": [
+    {
+      "t": 29.5,
+      "type": "alert",
+      "level": "WARNING",
+      "score": 62.1,
+      "state": "WARNING"
+    },
+    {
+      "t": 29.5,
+      "type": "state_change",
+      "from": "ACTIVE",
+      "to": "WARNING",
+      "score": 62.1
+    },
+    {
+      "t": 39.5,
+      "type": "alert",
+      "level": "WARNING",
+      "score": 69.3,
+      "state": "WARNING"
+    },
+    {
+      "t": 47.7,
+      "type": "state_change",
+      "from": "WARNING",
+      "to": "MILD",
+      "score": 45.2
+    }
+  ],
+  "summary": {
+    "total_frames": 0,
+    "peak_score": 82.8,
+    "avg_score": 0.0,
+    "alerts_count": 2,
+    "yawn_count": 0,
+    "manual_resets": 0,
+    "state_breakdown": {
+      "NO_FACE": 0.0,
+      "ACTIVE": 100.0,
+      "MILD": 0.0,
+      "WARNING": 0.0,
+      "ALERT": 0.0,
+      "CRITICAL": 0.0
+    },
+    "frames": 1511,
+    "final_state": "MILD"
+  }
+}

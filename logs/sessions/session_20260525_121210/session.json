@@ -1,0 +1,84 @@
+{
+  "session_id": "20260525_121210",
+  "driver_id": "unknown",
+  "started_at": "2026-05-25T12:12:10",
+  "ended_at": "2026-05-25T12:12:55",
+  "duration_minutes": 0.74,
+  "timeseries": [],
+  "events": [
+    {
+      "t": 3.4,
+      "type": "alert",
+      "level": "WARNING",
+      "score": 0.0,
+      "state": "NO_FACE"
+    },
+    {
+      "t": 3.4,
+      "type": "state_change",
+      "from": "ACTIVE",
+      "to": "NO_FACE",
+      "score": 0.0
+    },
+    {
+      "t": 8.4,
+      "type": "alert",
+      "level": "WARNING",
+      "score": 0.0,
+      "state": "NO_FACE"
+    },
+    {
+      "t": 13.4,
+      "type": "alert",
+      "level": "WARNING",
+      "score": 0.0,
+      "state": "NO_FACE"
+    },
+    {
+      "t": 14.9,
+      "type": "state_change",
+      "from": "NO_FACE",
+      "to": "ACTIVE",
+      "score": 27.9
+    },
+    {
+      "t": 27.0,
+      "type": "alert",
+      "level": "WARNING",
+      "score": 0.0,
+      "state": "NO_FACE"
+    },
+    {
+      "t": 27.0,
+      "type": "state_change",
+      "from": "ACTIVE",
+      "to": "NO_FACE",
+      "score": 0.0
+    },
+    {
+      "t": 29.8,
+      "type": "state_change",
+      "from": "NO_FACE",
+      "to": "ACTIVE",
+      "score": 39.8
+    }
+  ],
+  "summary": {
+    "total_frames": 0,
+    "peak_score": 66.2,
+    "avg_score": 0.0,
+    "alerts_count": 4,
+    "yawn_count": 0,
+    "manual_resets": 0,
+    "state_breakdown": {
+      "NO_FACE": 0.0,
+      "ACTIVE": 100.0,
+      "MILD": 0.0,
+      "WARNING": 0.0,
+      "ALERT": 0.0,
+      "CRITICAL": 0.0
+    },
+    "frames": 1269,
+    "final_state": "ACTIVE"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "session_id": "20260525_112411",
+  "driver_id": "unknown",
+  "started_at": "2026-05-25T11:24:11",
+  "ended_at": "2026-05-25T11:24:33",
+  "duration_minutes": 0.37,
+  "timeseries": [],
+  "events": [],
+  "summary": {
+    "total_frames": 0,
+    "peak_score": 24.8,
+    "avg_score": 0.0,
+    "alerts_count": 0,
+    "yawn_count": 0,
+    "manual_resets": 0,
+    "state_breakdown": {
+      "NO_FACE": 0.0,
+      "ACTIVE": 100.0,
+      "MILD": 0.0,
+      "WARNING": 0.0,
+      "ALERT": 0.0,
+      "CRITICAL": 0.0
+    },
+    "frames": 662,
+    "final_state": "ACTIVE"
+  }
+}

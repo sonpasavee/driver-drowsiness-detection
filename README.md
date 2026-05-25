@@ -116,11 +116,19 @@ env\Scripts\python.exe main.py
 
 - App log: `logs/driver_monitor.log`
 - Session metrics: `logs/sessions/session_YYYYMMDD_HHMMSS.jsonl`
+- Session summary: `logs/sessions/session_YYYYMMDD_HHMMSS_summary.json`
 
 Each JSONL line is a structured record such as:
 - `frame`
 - `state_change`
 - `manual_reset`
+
+Notes:
+- `.jsonl` session files are machine-readable telemetry logs, not human-friendly reports.
+- `_summary.json` is the human-readable session file.
+- By default, the app now logs only important events.
+- To also log periodic frame snapshots, set `app.frame_log_enabled: true`.
+- Control frame log frequency with `app.frame_log_interval_frames`.
 
 ## Configuration
 
